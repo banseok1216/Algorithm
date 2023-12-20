@@ -98,12 +98,12 @@ public class Main {
         list2[rooty][0] = rootx;
         list2[rooty][1] += (w+list2[x][1]-list2[y][1]);
     }
-    private static int find(int x) {
-        if (list2[x][0] == x) return x;
-        else {
-            int prv = find(list2[x][0]);
+    private static int find(int x){
+        if(list2[x][0] != x){
+            int root=find(list2[x][0]);
             list2[x][1] += list2[list2[x][0]][1];
-            return list2[x][0] = prv;
+            list2[x][0] = root;
         }
+        return list2[x][0];
     }
 }
