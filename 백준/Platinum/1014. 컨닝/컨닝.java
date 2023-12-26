@@ -73,10 +73,18 @@ public class Main {
         if(cur == n) return 0;
         if(v[pre][cur] != -1) return v[pre][cur];
         int preused = pre;
-        for (int i = 0; i < m; ++i) {
-            if ((pre & (1 << i)) > 0) {
-                preused |= (1 << (i + 1)); // 이 자리 또한 사용 불가능
-                preused |= (1 << (i - 1)); // 이 자리 또한 사용 불가능
+        for(int i=0; i<m; i++){
+            if((pre & (1<<i)) != 0){
+                if(i==0){
+                    preused |= (1 << (i + 1));
+                }
+                else if(i==m-1){
+                    preused |= (1 << (i - 1));
+                }
+                else {
+                    preused |= (1 << (i + 1));
+                    preused |= (1 << (i - 1));
+                }
             }
         }
         int result = dfs(0, cur + 1);
