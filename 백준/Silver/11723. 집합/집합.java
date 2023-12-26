@@ -66,7 +66,7 @@ public class Main {
                 bitset = bitset ^(1 << (n - 1));
             }
             if(str.equals("all")){
-                bitset |= (1<<27)-1;
+                bitset |= (~0);
             }
             if(str.equals("empty")){
                 bitset &= 0;
