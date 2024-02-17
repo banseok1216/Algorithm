@@ -21,21 +21,21 @@ class Solution {
         emoLen = emoticons.length;
         ans.add(new int[]{0,0});
         //모든 경우의 수를 리스트에 담는다.
-        dfs(users,emoticons, new int[emoLen], 0 );
+        dfs(users, new int[emoLen][2], 0 );
         Collections.sort(ans, (a, b) -> b[0] - a[0] == 0 ? b[1] - a[1] : b[0] - a[0]);
         return ans.get(0);
     }
 
-    public static void dfs(int[][] u, int[] e, int[] disInfo, int level){
+    public static void dfs(int[][] u, int[][] disInfo, int level){
         if(level == emoLen){//종료 조건
             int buyCnt = 0 ;
             int buySum = 0;
 
             for(int i = 0 ;i < userLen ;i++){
                 int sum = 0 ;
-                for(int j =0 ; j< emoLen; j++){
-                    if(disInfo[j] >= u[i][0])
-                        sum+= e[j]/100*(100-disInfo[j]);
+                for(int j=0; j<level;j++){
+                    if(disInfo[j][0] >= u[i][0])
+                        sum+= disInfo[j][1];
                 }
                 if(sum >= u[i][1]){
                     buyCnt++;
@@ -46,9 +46,12 @@ class Solution {
             ans.add(new int[]{buyCnt,buySum});
             return;
         }else{
-            for(int i = 0 ;i < 4 ;i++){
-                disInfo[level] = dis[i];
-                dfs(u,e,disInfo, level+1);
+                for(int j=level; j<copyEmoticon.length; j++){
+                    for(int i = 0 ;i < 4 ;i++){
+                    disInfo[j][0] = (i+1)*10;
+                    disInfo[j][1] = copyEmoticon[j][i];
+                    dfs(u,disInfo, j+1);
+                }
             }
         }
     }
