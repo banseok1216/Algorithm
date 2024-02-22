@@ -1,0 +1,6 @@
+-- 코드를 입력하세요
+SELECT SUBSTRING(PRODUCT_CODE,1,2) as ll,
+Count(PRODUCT_ID)
+FROM PRODUCT
+GROUP BY ll
+order by ll
