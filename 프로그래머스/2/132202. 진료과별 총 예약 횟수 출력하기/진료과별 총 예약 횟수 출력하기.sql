@@ -1,0 +1,5 @@
+-- 코드를 입력하세요
+SELECT MCDP_CD , COUNT(APNT_YMD) as ll
+FROM (SELECT * FROM APPOINTMENT WHERE date(APNT_YMD) between '2022-05-01' and '2022-05-31' ) as m
+GROUP BY MCDP_CD
+order by ll ,MCDP_CD
