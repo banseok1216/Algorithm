@@ -1,44 +1,38 @@
-import queue
-import sys
 from collections import deque
-
+import sys
 input = sys.stdin.readline
 
-
+def bfs(board, N, M, list1, list2, checkBoard, i, j):
+    que = deque()
+    que.append((i, j))
+    while que:
+        node = que.popleft()
+        for k in range(4):
+            nx = node[0] + list1[k]
+            ny = node[1] + list2[k]
+            if 0 <= nx < N and 0 <= ny < M and not checkBoard[nx][ny]:
+                if board[nx][ny] == 0 and board[node[0]][node[1]] > 0:
+                    board[node[0]][node[1]] -= 1
+                if board[nx][ny] > 0:
+                    checkBoard[nx][ny] = True
+                    que.append((nx, ny))
 if __name__ == '__main__':
     N, M = map(int, input().split())
-    mat = [list(map(int, input().split())) for _ in range(N)]
+    board = [list(map(int, input().split())) for _ in range(N)]
     list1 = [-1, 1, 0, 0]
     list2 = [0, 0, -1, 1]
     times = 0
-    iceberg = set()
-    for i in range(N):
-        for j in range(M):
-            if mat[i][j] != 0:
-                iceberg.add((i, j))
+
     while True:
         times += 1
-        visited = [[False] * M for _ in range(N)]
+        checkBoard = [[False] * M for _ in range(N)]
         count = 0
-        copy_iceberg = iceberg.copy()
-        for i, j in copy_iceberg:
-                if mat[i][j] != 0 and not visited[i][j]:
+        for i in range(N):
+            for j in range(M):
+                if board[i][j] != 0 and not checkBoard[i][j]:
                     count += 1
-                    visited[i][j] = True
-                    queue = deque([(i, j)])
-                    while queue:
-                        x, y = queue.popleft()
-                        for cx, cy in (0, 1), (1, 0), (0, -1), (-1, 0):
-                            nx = x + cx
-                            ny = y + cy
-                            if not visited[nx][ny]:
-                                if mat[nx][ny] == 0 and mat[x][y] != 0:
-                                    mat[x][y] -= 1
-                                if mat[nx][ny] != 0:
-                                    visited[nx][ny] = True
-                                    queue.append((nx, ny))
-                        if mat[x][y] == 0:
-                            iceberg.remove((x, y))
+                    checkBoard[i][j] = True
+                    bfs(board, N, M, list1, list2, checkBoard, i, j)
         if count >= 2:
             break
         if count == 0:
