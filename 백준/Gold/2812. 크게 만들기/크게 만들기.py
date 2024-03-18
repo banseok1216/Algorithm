@@ -1,21 +1,18 @@
 import sys
 from collections import deque
+def solution():
+    INPUT = sys.stdin.readline
+    N, K = map(int, INPUT().split())
+    numbers = input().rstrip()
+    stack = []
 
-n, k = map(int, sys.stdin.readline().split())
-
-num = list(map(int, sys.stdin.readline().strip()))
-
-answer = 0
-stack = []
-for i in range(n):
-    while stack and k > 0:
-        if stack[len(stack) - 1] < num[i]:
+    for number in numbers:
+        while stack and stack[-1] < number and K > 0:
             stack.pop()
-            k -= 1
-        else:
-            break
-    stack.append(num[i])
-
-for i in range(len(stack) - k):
-    print(stack[i], end='')
-
+            K -= 1
+        stack.append(number)
+    if K > 0:
+        return ''.join(stack[:-K])
+    else:
+        return ''.join(stack)
+print(solution())
