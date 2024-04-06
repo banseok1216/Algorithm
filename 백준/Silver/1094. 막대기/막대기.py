@@ -1,0 +1,12 @@
+cm=int(input())
+x=64
+count=0
+while(1):
+    if(cm<x):   
+        x=x//2
+    else:
+        cm=cm-x
+        count+=1
+        if(cm==0):
+            break
+print(count)
