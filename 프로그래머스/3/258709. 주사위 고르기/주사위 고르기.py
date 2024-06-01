@@ -1,39 +1,43 @@
+#A,B n개의 주사위를 가지고 승부 
+#1~n의 번호를 가지고 있음
+#n/2씩 가져간다
+#n개의 리스트에서 중복순열을 통해 -> 
 from itertools import combinations, product
 import bisect
 
 def solution(dice):
-    dic = {}
-    L = len(dice)
-    ans =0
-    maxAns=[]
-    for A_index_combi in combinations(dice, L//2):
-        B_index_combi = [i for i in dice if i not in A_index_combi]
-        A, B = [], []
-        for order_product in product(range(6), repeat=L//2):
-            sumA =0
-            sumB =0
-            for j in range(L//2):
-                    sumA+=A_index_combi[j][order_product[j]]
-                    sumB+=B_index_combi[j][order_product[j]]
-            A.append(sumA)
-            B.append(sumB)
-        A.sort()
-        B.sort()
-        maxSum =0
-        for i in A:
-            maxSum += bisect.bisect_left(B, i)
-        if ans < maxSum:
-            ans = maxSum
-            maxAns = A_index_combi
-        maxSum = 0
-        for i in B:
-            maxSum += bisect.bisect_left(A, i)
-        if ans < maxSum:
-            ans = maxSum
-            maxAns = B_index_combi
+    L = len(dice)//2
+    ansCount = 0
+    ansList = []
+    for a_dice in combinations(dice,L):
+        b_dice = [i for i in dice if i not in a_dice]
+        a_sum_list = []
+        b_sum_list = []
+        for items in product(range(6), repeat=L):
+            a_sum = 0
+            b_sum = 0
+            for i in range(len(items)):
+                a_sum += a_dice[i][items[i]]
+                b_sum += b_dice[i][items[i]]
+            a_sum_list.append(a_sum)
+            b_sum_list.append(b_sum)
+        a_sum_list.sort()
+        b_sum_list.sort()
+        a_sum = 0
+        for target in b_sum_list:
+            a_sum += bisect.bisect_left(a_sum_list,target)
+        if a_sum > ansCount:
+            ansCount = a_sum
+            ansList = b_dice
+        b_sum = 0
+        for target in a_sum_list:
+            b_sum+= bisect.bisect_left(b_sum_list,target)
+        if b_sum > ansCount:
+            ansCount = b_sum
+            ansList = a_dice
     answer = []
-    for index in range(len(dice)):
-        for j in maxAns:
-            if dice[index] == j:
-                answer.append(index+1)
+    for i in range(len(dice)):
+        for j in range(len(ansList)):
+            if dice[i]  == ansList[j]:
+                answer.append(i+1)
     return answer
